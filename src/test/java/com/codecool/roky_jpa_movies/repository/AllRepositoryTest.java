@@ -115,7 +115,51 @@ class AllRepositoryTest {
     }
 
     @Test
-    public void addEpisodesViaSeasonsAndSeries_episodesArePersistedAndDeletedWithSeries() {
+    public void addSeasonsViaSeries_seasonsArePersistedAndDeletedWithSeries() {
+
+        Season bbS1 = Season.builder()
+                .seasonNumber(1)
+                .firstAired(LocalDate.of(2008, 1, 20))
+                .build();
+        Season bbS2 = Season.builder().seasonNumber(2).firstAired(LocalDate.of(2009, 3, 8)).build();
+        Season bbS3 = Season.builder().seasonNumber(3).firstAired(LocalDate.of(2010, 3, 21)).build();
+        Season bbS4 = Season.builder().seasonNumber(4).firstAired(LocalDate.of(2011, 7, 17)).build();
+        Season bbS5 = Season.builder().seasonNumber(5).firstAired(LocalDate.of(2012, 7, 15)).build();
+
+        Series breaking_bad = Series.builder()
+                .title("Breaking Bad")
+                .genre(Genre.DRAMA)
+                .genre(Genre.CRIME)
+                .genre(Genre.THRILLER)
+                .seasons(Arrays.asList(bbS1, bbS2, bbS3, bbS4, bbS5))
+                .firstAired(LocalDate.of(2008, 1, 20))
+                .rating(Rating.FIVE)
+                .personalRating(Rating.FIVE)
+                .description("Breaking Bad follows Walter White, a meek high school chemistry teacher who transforms into a ruthless player in the local methamphetamine drug trade.")
+                .build();
+
+        bbS1.setSeries(breaking_bad);
+        bbS2.setSeries(breaking_bad);
+        bbS3.setSeries(breaking_bad);
+        bbS4.setSeries(breaking_bad);
+        bbS5.setSeries(breaking_bad);
+
+        seriesRepository.saveAndFlush(breaking_bad);
+
+        assertThat(seasonRepository.findAll())
+                .hasSize(5)
+                .anyMatch(season -> season.getSeasonNumber().equals(5));
+
+        seriesRepository.deleteAll();
+
+        assertThat(seasonRepository.findAll())
+                .hasSize(0);
+
+
+    }
+
+    @Test
+    public void addEpisodesViaSeries_episodesArePersistedAndDeletedWithSeries() {
 
         Episode bbS1E01 = Episode.builder().episodeNumber(1).airDate(LocalDate.of(2008, 1, 20)).build();
         Episode bbS1E02 = Episode.builder().episodeNumber(2).airDate(LocalDate.of(2008, 1, 27)).build();
@@ -163,7 +207,6 @@ class AllRepositoryTest {
         bbS5.setSeries(breaking_bad);
 
         seriesRepository.saveAndFlush(breaking_bad);
-//        entityManager.clear();
 
         assertThat(seasonRepository.findAll())
                 .hasSize(5)
@@ -174,7 +217,6 @@ class AllRepositoryTest {
                 .anyMatch(episode -> episode.getEpisodeNumber().equals(7));
 
         seriesRepository.deleteAll();
-//        entityManager.clear();
 
         assertThat(seasonRepository.findAll())
                 .hasSize(0);
