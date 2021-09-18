@@ -4,5 +4,6 @@ public enum Genre {
 
     CRIME,
     DRAMA,
-    THRILLER
+    THRILLER,
+    COMEDY
 }
