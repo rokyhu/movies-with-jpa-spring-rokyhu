@@ -1,9 +1,7 @@
 package com.codecool.roky_jpa_movies;
 
 import com.codecool.roky_jpa_movies.entity.*;
-import com.codecool.roky_jpa_movies.repository.SeasonRepository;
 import com.codecool.roky_jpa_movies.repository.SeriesRepository;
-import com.google.inject.internal.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.Arrays;
 
