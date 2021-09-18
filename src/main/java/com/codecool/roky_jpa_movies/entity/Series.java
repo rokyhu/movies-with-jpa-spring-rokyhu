@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.GenerationType.*;
 
@@ -12,7 +13,6 @@ import static javax.persistence.GenerationType.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 @ToString
 @Builder
 @Entity(name = "Series")
@@ -28,8 +28,7 @@ public class Series {
     @SequenceGenerator(
             name = "series_sequence",
             sequenceName = "series_sequence",
-            allocationSize = 1,
-            initialValue = 100
+            allocationSize = 1
     )
     @GeneratedValue(
             strategy = SEQUENCE,
@@ -52,12 +51,29 @@ public class Series {
     private String description;
 
     @Column(
-            name="first_air_date",
+            name="first_aired",
             nullable = false
     )
-    private LocalDate airDate;
+    private LocalDate firstAired;
+
+    @Column(name="rating")
+    @Enumerated(EnumType.STRING)
+    private Rating rating;
+
+    @Transient
+    @Enumerated(EnumType.STRING)
+    private Rating personalRating;
 
     @ElementCollection
     @Singular
+    @Enumerated(EnumType.STRING)
+    @EqualsAndHashCode.Exclude
     private List<Genre> genres;
+
+
+    @OneToMany(mappedBy = "series", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @EqualsAndHashCode.Exclude
+    @Singular
+    @ToString.Exclude
+    private Set<Season> seasons;
 }
