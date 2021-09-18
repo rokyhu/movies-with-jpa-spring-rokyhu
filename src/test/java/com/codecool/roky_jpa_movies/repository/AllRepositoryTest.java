@@ -37,7 +37,7 @@ class AllRepositoryTest {
     public void addNewSimple_persistedToDatabase() {
         Series breaking_bad = Series.builder()
                 .title("Breaking Bad")
-                .airDate(LocalDate.of(2008, 1, 20))
+                .firstAired(LocalDate.of(2008, 1, 20))
                 .build();
 
         seriesRepository.save(breaking_bad);
@@ -48,28 +48,28 @@ class AllRepositoryTest {
     }
 
     @Test
-    public void addTwoWithTheSameUniqueID_throwsException() {
+    public void addTwoWithTheSameUniqueField_throwsException() {
         Series breaking_bad = Series.builder()
                 .title("Breaking Bad")
-                .airDate(LocalDate.of(2008, 1, 20))
+                .firstAired(LocalDate.of(2008, 1, 20))
                 .build();
 
         seriesRepository.save(breaking_bad);
 
         Series better_call_saul = Series.builder()
-                .title("Breaking Bad")
-                .airDate(LocalDate.of(2015, 2, 8))
+                .title("Breaking Bad")  // Title should be unique!
+                .firstAired(LocalDate.of(2015, 2, 8))
                 .build();
 
         assertThrows(DataIntegrityViolationException.class, () -> {
-            seriesRepository.saveAndFlush(better_call_saul);  // TODO Understand save & flush better!
+            seriesRepository.saveAndFlush(better_call_saul);  // TODO Roky Understand save & flush better!
         });
     }
 
     @Test
-    public void addNewSimpleWithoutRequiredField_throwsException() {
+    public void addWithoutRequiredField_throwsException() {
         Series breaking_bad = Series.builder()
-                .title("Breaking Bad")
+                .title("Breaking Bad") // Missing firstAired!
                 .build();
 
         assertThrows(DataIntegrityViolationException.class, () -> seriesRepository.save(breaking_bad));
